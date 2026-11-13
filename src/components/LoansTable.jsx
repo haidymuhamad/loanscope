@@ -5,10 +5,14 @@ function LoansTable({ loans, onDelete }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
 
-  const filteredLoans = loans.filter((loan) => {
+const filteredLoans = loans.filter((loan) => {
+    const name = loan.applicantName || "";
+    const idStr = loan.id ? loan.id.toString() : "";
+    const term = searchTerm || "";
+
     const matchesSearch = 
-      loan.applicantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (loan.id && loan.id.toString().toLowerCase().includes(searchTerm.toLowerCase()));
+      name.toLowerCase().includes(term.toLowerCase()) ||
+      idStr.toLowerCase().includes(term.toLowerCase());
       
     const matchesStatus = statusFilter === 'All' || loan.status === statusFilter;
     return matchesSearch && matchesStatus;
