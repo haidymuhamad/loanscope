@@ -1,0 +1,44 @@
+.assessment-result {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  border-radius: 8px;
+  background-color: #f7fafc;
+  border: 1px solid #e2e8f0;
+  text-align: center;
+}
+
+.assessment-result h3 {
+  font-size: 1rem;
+  color: #4a5568;
+  margin-bottom: 0.5rem;
+}
+
+.result-badge {
+  font-size: 1.25rem;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+.assessment-result.eligible .result-badge {
+  background-color: #def7ec;
+  color: #03543f;
+}
+
+.assessment-result.not-eligible .result-badge {
+  background-color: #fde8e8;
+  color: #9b1c1c;
+}
+
+.assessment-result.invalid-data .result-badge {
+  background-color: #fef08a;
+  color: #713f12;
+}
+
+.result-note {
+  display: block;
+  font-size: 0.75rem;
+  color: #a0aec0;
+}
