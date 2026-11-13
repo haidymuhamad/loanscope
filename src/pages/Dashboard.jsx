@@ -7,7 +7,6 @@ import assessLoan from '../utils/loanAssessment';
 import './Dashboard.css';
 
 function Dashboard() {
-
   const [loans, setLoans] = useState(() => {
     const savedLoans = localStorage.getItem('loanApplications');
     if (savedLoans) {
@@ -17,25 +16,19 @@ function Dashboard() {
         console.error('Failed to parse loans from localStorage:', error);
       }
     }
+    
     return [
-      {
-        id: 1,
-        applicantName: 'Ahmed Mohamed',
-        age: 25,
-        monthlyIncome: 20000,
-        loanAmount: 100000,
-        employmentStatus: 'Employed',
-        creditHistory: 'Good',
-        status: 'Eligible'
-      }
+      { id: "LP001430", applicantName: "Applicant LP001430", age: 30, monthlyIncome: 4166, loanAmount: 44, employmentStatus: "No", creditHistory: "Good", status: "Eligible" },
+      { id: "LP002347", applicantName: "Applicant LP002347", age: 32, monthlyIncome: 3246, loanAmount: 138, employmentStatus: "No", creditHistory: "Good", status: "Eligible" },
+      { id: "LP001528", applicantName: "Applicant LP001528", age: 29, monthlyIncome: 6277, loanAmount: 118, employmentStatus: "No", creditHistory: "Bad", status: "Not Eligible" },
+      { id: "LP002974", applicantName: "Applicant LP002974", age: 35, monthlyIncome: 3232, loanAmount: 108, employmentStatus: "No", creditHistory: "Good", status: "Eligible" },
+      { id: "LP002368", applicantName: "Applicant LP002368", age: 28, monthlyIncome: 5935, loanAmount: 133, employmentStatus: "No", creditHistory: "Good", status: "Eligible" }
     ];
   });
-
 
   useEffect(() => {
     localStorage.setItem('loanApplications', JSON.stringify(loans));
   }, [loans]);
-
 
   const handleAddApplication = (formData) => {
     const assessmentResult = assessLoan(formData);
@@ -52,7 +45,6 @@ function Dashboard() {
   const handleDeleteApplication = (id) => {
     setLoans(loans.filter(loan => loan.id !== id));
   };
-
 
   const totalApps = loans.length;
   const eligibleCount = loans.filter(l => l.status === 'Eligible').length;
