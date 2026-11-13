@@ -1,14 +1,16 @@
+import { INITIAL_ML_DATA } from '../data/loansData';
 import { useState, useEffect } from 'react';
 import StatCard from '../components/StatCard';
-
 import LoanForm from '../components/LoanForm';
-
+import LoansTable from '../components/LoansTable';
 import assessLoan from '../utils/loanAssessment';
+
 import './Dashboard.css';
 
 function Dashboard() {
   const [loans, setLoans] = useState(() => {
     const savedLoans = localStorage.getItem('loanApplications');
+
     if (savedLoans) {
       try {
         return JSON.parse(savedLoans);
@@ -16,37 +18,81 @@ function Dashboard() {
         console.error('Failed to parse loans from localStorage:', error);
       }
     }
-    
-    return [
-      { id: "LP001430", applicantName: "Applicant LP001430", age: 30, monthlyIncome: 4166, loanAmount: 44, employmentStatus: "No", creditHistory: "Good", status: "Eligible" },
-      { id: "LP002347", applicantName: "Applicant LP002347", age: 32, monthlyIncome: 3246, loanAmount: 138, employmentStatus: "No", creditHistory: "Good", status: "Eligible" },
-      { id: "LP001528", applicantName: "Applicant LP001528", age: 29, monthlyIncome: 6277, loanAmount: 118, employmentStatus: "No", creditHistory: "Bad", status: "Not Eligible" },
-      { id: "LP002974", applicantName: "Applicant LP002974", age: 35, monthlyIncome: 3232, loanAmount: 108, employmentStatus: "No", creditHistory: "Good", status: "Eligible" },
-      { id: "LP002368", applicantName: "Applicant LP002368", age: 28, monthlyIncome: 5935, loanAmount: 133, employmentStatus: "No", creditHistory: "Good", status: "Eligible" }
-    ];
+
+    return INITIAL_ML_DATA;
   });
 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('All');
+
+  // Save loans to localStorage
   useEffect(() => {
     localStorage.setItem('loanApplications', JSON.stringify(loans));
   }, [loans]);
 
+  // Add new loan application
   const handleAddApplication = (formData) => {
     const assessmentResult = assessLoan(formData);
 
     const newLoan = {
-      id: Date.now(),
+      Loan_ID: `LP${Date.now()}`,
       ...formData,
-      status: assessmentResult
+      Loan_Status:
+        assessmentResult === 'Eligible' ? 'Y' : 'N',
     };
 
-    setLoans([newLoan, ...loans]);
+    setLoans((prevLoans) => [newLoan, ...prevLoans]);
   };
 
+  // Delete loan application
+  const handleDelete = (loanId) => {
+    setLoans((prevLoans) =>
+      prevLoans.filter((loan) => loan.Loan_ID !== loanId)
+    );
+  };
 
+  // Search and Filter
+  const filteredLoans = loans.filter((loan) => {
+    const loanId = loan.Loan_ID
+      ? loan.Loan_ID.toString()
+      : '';
+
+    const term = searchTerm || '';
+
+    const matchesSearch = loanId
+      .toLowerCase()
+      .includes(term.toLowerCase());
+
+    const isEligible =
+      loan.Loan_Status === 'Y' ||
+      loan.Loan_Status === 'Eligible';
+
+    const statusStr = isEligible
+      ? 'Eligible'
+      : 'Not Eligible';
+
+    const matchesStatus =
+      statusFilter === 'All' ||
+      statusStr === statusFilter;
+
+    return matchesSearch && matchesStatus;
+  });
+
+  // Statistics
   const totalApps = loans.length;
-  const eligibleCount = loans.filter(l => l.status === 'Eligible').length;
-  const notEligibleCount = loans.filter(l => l.status === 'Not Eligible').length;
-  const approvalRate = totalApps > 0 ? ((eligibleCount / totalApps) * 100).toFixed(1) + '%' : '0%';
+
+  const eligibleCount = loans.filter(
+    (loan) =>
+      loan.Loan_Status === 'Y' ||
+      loan.Loan_Status === 'Eligible'
+  ).length;
+
+  const notEligibleCount = totalApps - eligibleCount;
+
+  const approvalRate =
+    totalApps > 0
+      ? ((eligibleCount / totalApps) * 100).toFixed(1) + '%'
+      : '0%';
 
   return (
     <div>
@@ -54,16 +100,60 @@ function Dashboard() {
         <h1>Dashboard Overview</h1>
         <h2>Loan Risk Assessment Dashboard</h2>
 
+        {/* Statistics */}
         <div className="stats-grid">
-          <StatCard title="Total Applications" value={totalApps} icon="📄" />
-          <StatCard title="Eligible Loans" value={eligibleCount} icon="✅" />
-          <StatCard title="Not Eligible" value={notEligibleCount} icon="❌" />
-          <StatCard title="Approval Rate" value={approvalRate} icon="📊" />
+          <StatCard
+            title="Total Applications"
+            value={totalApps}
+            icon="📄"
+          />
+
+          <StatCard
+            title="Eligible Loans"
+            value={eligibleCount}
+            icon="✅"
+          />
+
+          <StatCard
+            title="Not Eligible"
+            value={notEligibleCount}
+            icon="❌"
+          />
+
+          <StatCard
+            title="Approval Rate"
+            value={approvalRate}
+            icon="📊"
+          />
         </div>
 
+        {/* Add Loan Application */}
         <LoanForm onAddApplication={handleAddApplication} />
 
-       
+        {/* Search and Filters */}
+        <div className="loan-filters">
+          <input
+            type="text"
+            placeholder="Search by Loan ID..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="All">All Statuses</option>
+            <option value="Eligible">Eligible</option>
+            <option value="Not Eligible">Not Eligible</option>
+          </select>
+        </div>
+
+        {/* Loans Table */}
+        <LoansTable
+          loans={filteredLoans}
+          onDelete={handleDelete}
+        />
       </div>
     </div>
   );

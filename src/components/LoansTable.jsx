@@ -1,105 +1,55 @@
-import { useState } from 'react';
 import './LoansTable.css';
 
 function LoansTable({ loans, onDelete }) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('All');
-
-const filteredLoans = loans.filter((loan) => {
-    const name = loan.applicantName || "";
-    const idStr = loan.id ? loan.id.toString() : "";
-    const term = searchTerm || "";
-
-    const matchesSearch = 
-      name.toLowerCase().includes(term.toLowerCase()) ||
-      idStr.toLowerCase().includes(term.toLowerCase());
-      
-    const matchesStatus = statusFilter === 'All' || loan.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
-
   if (!loans || loans.length === 0) {
-    return (
-      <div className="table-container">
-        <h3>Loan Applications Management</h3>
-        <p className="no-data">No loan applications submitted yet.</p>
-      </div>
-    );
+    return <p style={{ textAlign: 'center', padding: '2rem', color: '#718096' }}>No loan applications found.</p>;
   }
 
   return (
-    <div className="table-container">
-      <div className="table-header-flex">
-        <h3>Loan Applications Management</h3>
-      
-        <div className="table-controls">
-          <input
-            type="text"
-            placeholder="Search by name or ID..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-          />
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="filter-select"
-          >
-            <option value="All">All Status</option>
-            <option value="Eligible">Eligible</option>
-            <option value="Not Eligible">Not Eligible</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="table-responsive">
-        <table className="loans-table">
-          <thead>
-            <tr>
-              <th>Loan ID</th>
-              <th>Applicant Name</th>
-              <th>Age</th>
-              <th>Monthly Income</th>
-              <th>Loan Amount</th>
-              <th>Employment</th>
-              <th>Credit History</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredLoans.length > 0 ? (
-              filteredLoans.map((loan) => (
-            <tr key={loan.id}>
-      <td>{loan.id}</td>
-      <td>{loan.applicantName}</td>
-      <td>{loan.age}</td>
-      <td>${loan.monthlyIncome}</td>
-      <td>${loan.loanAmount}</td>
-      <td>{loan.employmentStatus}</td>
-      <td>{loan.creditHistory}</td>
-      <td>
-        <span className={`badge ${loan.status === 'Eligible' ? 'approved' : 'rejected'}`}>
-          {loan.status}
-        </span>
-      </td>
-      <td>
-        <button onClick={() => onDelete(loan.id)} className="delete-btn">
-          Delete
-        </button>
-      </td>
-    </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="9" className="no-data" style={{ textAlign: 'center' }}>
-                  No matching loan applications found.
+    <div className="table-responsive">
+      <table className="loans-table">
+        <thead>
+          <tr>
+            <th>Loan ID</th>
+            <th>Gender</th>
+            <th>Married</th>
+            <th>Education</th>
+            <th>Income</th>
+            <th>Loan Amount</th>
+            <th>Credit History</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loans.map((loan) => {
+            // تحديد هل الحالة مقبولة (Eligible/Y) أو مرفوضة (Not Eligible/N)
+            const isEligible = loan.Loan_Status === 'Y' || loan.Loan_Status === 'Eligible';
+            
+            return (
+              <tr key={loan.Loan_ID || Math.random()}>
+                <td>{loan.Loan_ID}</td>
+                <td>{loan.Gender}</td>
+                <td>{loan.Married}</td>
+                <td>{loan.Education}</td>
+                <td>${loan.ApplicantIncome}</td>
+                <td>${loan.LoanAmount}</td>
+                <td>{loan.Credit_History === '1' || loan.Credit_History === 'Good' ? 'Good' : 'Bad'}</td>
+                <td>
+                  <span className={`badge ${isEligible ? 'approved' : 'rejected'}`}>
+                    {isEligible ? 'Eligible' : 'Not Eligible'}
+                  </span>
+                </td>
+                <td>
+                  <button onClick={() => onDelete(loan.Loan_ID)} className="delete-btn">
+                    Delete
+                  </button>
                 </td>
               </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 }
