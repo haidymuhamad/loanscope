@@ -1,16 +1,42 @@
-# React + Vite
+==================================================
+LoanScope: AI-Powered Loan Risk Assessment Dashboard
+==================================================
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+LoanScope is a project I built to bridge the gap between heavy machine learning data pipelines and clean, user-friendly frontend interfaces. Instead of keeping cleaned prediction data locked away in CSV files, LoanScope brings it to life through a modern, interactive React dashboard that evaluates loan eligibility in real-time.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+What Makes It Cool?
+- Real ML Data Integration: Loads and manages pre-cleaned, encoded records straight from real-world loan datasets.
+- Instant Risk Assessment: Evaluates new form submissions on the fly using custom logic that mimics predictive machine learning models.
+- Live Statistics: Instantly calculates total applications, approved vs. rejected counts, and dynamic approval rates.
+- Smart Filtering & Search: Easily search through records by applicant name or Loan ID, or filter by eligibility status.
+- Persistent Storage: Uses browser localStorage so your data stays intact even if you refresh or close the tab.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Built With
+- Frontend: React.js, Vite, Modern CSS
+- State & Logic: React Hooks (useState, useEffect)
+- Data Prep: Python (Pandas) for initial dataset cleaning and feature encoding
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Getting Started Locally
+
+Want to run it locally on your machine? It's super simple:
+
+1. Clone the repository:
+   git clone https://github.com/haidymuhamad/loanscope.git
+
+2. Navigate into the project directory:
+   cd loanscope
+
+3. Install dependencies:
+   npm install
+
+4. Run the development server:
+   npm run dev
+
+---
+Built with passion and lots of coffee sips by Haidy.

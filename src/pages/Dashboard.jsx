@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import StatCard from '../components/StatCard';
-import Navbar from '../components/Navbar';
+
 import LoanForm from '../components/LoanForm';
-import LoansTable from '../components/LoansTable';
+
 import assessLoan from '../utils/loanAssessment';
 import './Dashboard.css';
 
@@ -42,9 +42,6 @@ function Dashboard() {
     setLoans([newLoan, ...loans]);
   };
 
-  const handleDeleteApplication = (id) => {
-    setLoans(loans.filter(loan => loan.id !== id));
-  };
 
   const totalApps = loans.length;
   const eligibleCount = loans.filter(l => l.status === 'Eligible').length;
@@ -53,7 +50,6 @@ function Dashboard() {
 
   return (
     <div>
-      <Navbar />
       <div className="dashboard-container">
         <h1>Dashboard Overview</h1>
         <h2>Loan Risk Assessment Dashboard</h2>
@@ -67,7 +63,7 @@ function Dashboard() {
 
         <LoanForm onAddApplication={handleAddApplication} />
 
-        <LoansTable loans={loans} onDelete={handleDeleteApplication} />
+       
       </div>
     </div>
   );

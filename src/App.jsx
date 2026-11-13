@@ -1,10 +1,22 @@
-import Dashboard from './pages/Dashboard'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Dashboard from './pages/Dashboard';
+import Home from './pages/Home';
+import LoansPage from './pages/LoansPage';
+import About from './pages/About';
+
 function App() {
   return (
-    <div className="App">
-      <Dashboard />
-    </div>
-  )
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/loans" element={<LoansPage />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;

@@ -1,4 +1,4 @@
-[
+export const INITIAL_ML_DATA =[
   {
     "0": 0,
     "1": 1,

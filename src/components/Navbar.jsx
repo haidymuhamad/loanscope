@@ -1,15 +1,18 @@
+import { Link } from 'react-router-dom';
 import './Navbar.css';
 
 function Navbar() {
   return (
     <nav className="navbar">
-      <h1 className="navbar-logo">LoanScope 📊</h1>
-      <ul className="navbar-links">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#dashboard">Dashboard</a></li>
-        <li><a href="#loans">Loans</a></li>
-        <li><a href="#about">About</a></li>
-      </ul>
+      <div className="navbar-brand">
+        <h2>LoanScope</h2>
+      </div>
+      <div className="navbar-links">
+        <Link to="/">Home</Link>
+        <Link to="/dashboard">Dashboard</Link>
+        <Link to="/loans">Loans</Link>
+        <Link to="/about">About</Link>
+      </div>
     </nav>
   );
 }

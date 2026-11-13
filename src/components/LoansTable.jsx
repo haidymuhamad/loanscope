@@ -5,9 +5,11 @@ function LoansTable({ loans, onDelete }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
 
- 
   const filteredLoans = loans.filter((loan) => {
-    const matchesSearch = loan.applicantName.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = 
+      loan.applicantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (loan.id && loan.id.toString().toLowerCase().includes(searchTerm.toLowerCase()));
+      
     const matchesStatus = statusFilter === 'All' || loan.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -25,11 +27,11 @@ function LoansTable({ loans, onDelete }) {
     <div className="table-container">
       <div className="table-header-flex">
         <h3>Loan Applications Management</h3>
-     
+      
         <div className="table-controls">
           <input
             type="text"
-            placeholder="Search by name..."
+            placeholder="Search by name or ID..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
@@ -50,6 +52,7 @@ function LoansTable({ loans, onDelete }) {
         <table className="loans-table">
           <thead>
             <tr>
+              <th>Loan ID</th>
               <th>Applicant Name</th>
               <th>Age</th>
               <th>Monthly Income</th>
@@ -64,6 +67,7 @@ function LoansTable({ loans, onDelete }) {
             {filteredLoans.length > 0 ? (
               filteredLoans.map((loan) => (
                 <tr key={loan.id}>
+                  <td>{loan.id}</td>
                   <td>{loan.applicantName}</td>
                   <td>{loan.age}</td>
                   <td>${loan.monthlyIncome?.toLocaleString()}</td>
@@ -89,7 +93,7 @@ function LoansTable({ loans, onDelete }) {
               ))
             ) : (
               <tr>
-                <td colSpan="8" className="no-data" style={{ textAlign: 'center' }}>
+                <td colSpan="9" className="no-data" style={{ textAlign: 'center' }}>
                   No matching loan applications found.
                 </td>
               </tr>
