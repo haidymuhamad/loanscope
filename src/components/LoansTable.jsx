@@ -70,30 +70,25 @@ const filteredLoans = loans.filter((loan) => {
           <tbody>
             {filteredLoans.length > 0 ? (
               filteredLoans.map((loan) => (
-                <tr key={loan.id}>
-                  <td>{loan.id}</td>
-                  <td>{loan.applicantName}</td>
-                  <td>{loan.age}</td>
-                  <td>${loan.monthlyIncome?.toLocaleString()}</td>
-                  <td>${loan.loanAmount?.toLocaleString()}</td>
-                  <td>{loan.employmentStatus}</td>
-                  <td>{loan.creditHistory}</td>
-                  <td>
-                    <span className={`status-badge ${loan.status === 'Eligible' || loan.status === 'Approved' ? 'eligible' : 'not-eligible'}`}>
-                      {loan.status}
-                    </span>
-                  </td>
-                  <td>
-                    {onDelete && (
-                      <button 
-                        className="delete-btn" 
-                        onClick={() => onDelete(loan.id)}
-                      >
-                        Delete
-                      </button>
-                    )}
-                  </td>
-                </tr>
+            <tr key={loan.id}>
+      <td>{loan.id}</td>
+      <td>{loan.applicantName}</td>
+      <td>{loan.age}</td>
+      <td>${loan.monthlyIncome}</td>
+      <td>${loan.loanAmount}</td>
+      <td>{loan.employmentStatus}</td>
+      <td>{loan.creditHistory}</td>
+      <td>
+        <span className={`badge ${loan.status === 'Eligible' ? 'approved' : 'rejected'}`}>
+          {loan.status}
+        </span>
+      </td>
+      <td>
+        <button onClick={() => onDelete(loan.id)} className="delete-btn">
+          Delete
+        </button>
+      </td>
+    </tr>
               ))
             ) : (
               <tr>
